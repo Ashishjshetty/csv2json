@@ -15,10 +15,10 @@ function parseRow(headers, row) {
 
 
 
-router.get('/parseCSV', function(req, res, next) {
+router.get('/convert/csv/to/json', function(req, res, next) {
 	var csvUrl = req.query.q;
 	var currentTime = new Date().getTime().toString();
-	var fileName = './tmp/tmpfile_' + Math.ceil(Math.random() * 100000) + '_' + currentTime + '.csv'
+	var fileName = './tmp/tmpfile_' + Math.ceil(Math.random() * 100000) + '_' + currentTime + '.csv' // create ramdom filename
 	var wStream = fs.createWriteStream(fileName); // create write stream to write downloaded file
 	request(csvUrl).pipe(wStream); // attach write stream to request 
 	wStream.on('finish', function() {
@@ -34,7 +34,7 @@ router.get('/parseCSV', function(req, res, next) {
 				var rowVal = parseRow(header, row);
 				responseArray.push(rowVal);
 			}
-			fs.unlink(fileName);
+			fs.unlink(fileName);//delete saved file
 			res.send(responseArray);
 
 		});
